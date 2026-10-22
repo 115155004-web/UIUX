@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>長者端（復古木質收音機）- MemoryEcho</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: #f0ede6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #333;
+    }
+    .top-nav {
+      width: 100%;
+      max-width: 680px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: flex-start;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #ffffff;
+      border: 1px solid #dcd4c8;
+      border-radius: 8px;
+      color: #6d5b4b;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .back-link:hover {
+      background: #fbf9f6;
+      color: #433325;
+    }
+
+    /* Radio Outer Assembly */
+    .radio-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Top Handle */
+    .radio-handle {
+      width: 180px;
+      height: 28px;
+      background: #d88335;
+      border-top-left-radius: 14px;
+      border-top-right-radius: 14px;
+      border: 3px solid #b26219;
+      border-bottom: none;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
+      z-index: 1;
+    }
+
+    /* Radio Cabinet */
+    .radio-body {
+      width: 100%;
+      background: linear-gradient(145deg, #a35d28, #884818);
+      border-radius: 28px;
+      border: 6px solid #733c13;
+      padding: 34px 30px;
+      box-shadow: 0 20px 40px rgba(80, 40, 10, 0.35), inset 0 2px 6px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main Console Area (Screen + Volume) */
+    .console-row {
+      display: grid;
+      grid-template-columns: 1fr 140px;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 560px) {
+      .console-row {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    }
+
+    /* Black Display Screen */
+    .radio-screen {
+      position: relative;
+      background: #000000;
+      border: 4px solid #1a1a1a;
+      border-radius: 16px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.05), 0 4px 10px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    /* Confidence Light in Corner */
+    .confidence-light {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 10px #22c55e, 0 0 20px rgba(34, 197, 94, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .screen-text {
+      color: #ffffff;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-align: center;
+      user-select: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    /* Listening Pulse Animation */
+    .listening-waves {
+      display: none;
+      margin-top: 16px;
+      gap: 6px;
+      align-items: center;
+    }
+    .listening-waves.active {
+      display: flex;
+    }
+    .wave-bar {
+      width: 5px;
+      height: 24px;
+      background: #ffffff;
+      border-radius: 3px;
+      animation: wave 1s ease-in-out infinite alternate;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.2s; height: 36px; }
+    .wave-bar:nth-child(3) { animation-delay: 0.4s; height: 18px; }
+    .wave-bar:nth-child(4) { animation-delay: 0.1s; height: 32px; }
+    .wave-bar:nth-child(5) { animation-delay: 0.3s; height: 20px; }
+
+    @keyframes wave {
+      0% { transform: scaleY(0.4); opacity: 0.5; }
+      100% { transform: scaleY(1.2); opacity: 1; }
+    }
+
+    /* Volume Dial Area */
+    .volume-control {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dial-outer {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: #d88335;
+      border: 4px solid #b26219;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.1s ease;
+    }
+
+    .dial-inner {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: #7a3e12;
+      position: relative;
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .dial-indicator {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px;
+      height: 12px;
+      background: #ffffff;
+      border-radius: 2px;
+    }
+
+    .dial-label {
+      margin-top: 10px;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    /* Buttons Row */
+    .buttons-row {
+      display: grid;
+      grid-template-columns: 1fr 140px;
+      gap: 20px;
+    }
+
+    @media (max-width: 560px) {
+      .buttons-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .btn-action {
+      background: #df9e61;
+      color: #ffffff;
+      border: 2px solid #c97e37;
+      border-radius: 12px;
+      padding: 18px 20px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.35);
+      transition: all 0.15s ease;
+      outline: none;
+      user-select: none;
+    }
+
+    .btn-action:hover {
+      background: #e7a86e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-action:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-story {
+      width: 100%;
+    }
+
+    .btn-reset {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-nav">
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      MemoryEcho（記憶迴響）
+    </a>
+  </div>
+
+  <div class="radio-wrapper">
+    <div class="radio-handle"></div>
+    <div class="radio-body">
+      <div class="console-row">
+        <!-- Black Screen -->
+        <div class="radio-screen" id="radioScreen">
+          <div class="confidence-light" id="confidenceLight" title="記憶比對信心燈：綠燈（高把握度 ≥85%）"></div>
+          <div class="screen-text" id="screenText">阿罵你好</div>
+          <div class="listening-waves" id="listeningWaves">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+        </div>
+
+        <!-- Volume Knob -->
+        <div class="volume-control">
+          <div class="dial-outer" id="volumeDial" title="音量旋鈕">
+            <div class="dial-inner">
+              <div class="dial-indicator"></div>
+            </div>
+          </div>
+          <span class="dial-label">音量</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="buttons-row">
+        <button type="button" class="btn-action btn-story" id="btnStory">說故事</button>
+        <button type="button" class="btn-action btn-reset" id="btnReset">一鍵復原</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const screenText = document.getElementById('screenText');
+    const listeningWaves = document.getElementById('listeningWaves');
+    const btnStory = document.getElementById('btnStory');
+    const btnReset = document.getElementById('btnReset');
+    const volumeDial = document.getElementById('volumeDial');
+
+    // 互動：長者端按「說故事」→ 螢幕換成「正在聆聽…」
+    btnStory.addEventListener('click', () => {
+      screenText.textContent = '正在聆聽…';
+      listeningWaves.classList.add('active');
+    });
+
+    // 互動：按「一鍵復原」→ 回到第一個畫面
+    btnReset.addEventListener('click', () => {
+      screenText.textContent = '阿罵你好';
+      listeningWaves.classList.remove('active');
+    });
+
+    // 旋鈕互動
+    let currentAngle = 0;
+    volumeDial.addEventListener('click', () => {
+      currentAngle = (currentAngle + 30) % 360;
+      volumeDial.style.transform = `rotate(${currentAngle}deg)`;
+    });
+  </script>
+</body>
+</html>

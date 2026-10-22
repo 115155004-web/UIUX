@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>青年端（手機 App）- MemoryEcho</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: #1c1c1e;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #333333;
+    }
+
+    .top-nav {
+      width: 100%;
+      max-width: 420px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: flex-start;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #2c2c2e;
+      border: 1px solid #3a3a3c;
+      border-radius: 8px;
+      color: #d1d1d6;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .back-link:hover {
+      background: #3a3a3c;
+      color: #ffffff;
+    }
+
+    /* Mobile Phone Shell */
+    .phone-mockup {
+      width: 100%;
+      max-width: 410px;
+      background: #ffffff;
+      border-radius: 40px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 10px #2c2c2e;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Phone Status Bar */
+    .phone-status-bar {
+      height: 36px;
+      background: #9A8B7D;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Header Bar (Taupe from Figma) */
+    .app-header {
+      background: #9A8B7D;
+      padding: 12px 20px 18px;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .app-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .app-header span {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .app-content {
+      padding: 18px 16px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 740px;
+      overflow-y: auto;
+    }
+
+    /* Tags / Chips Row (Mauve, Slate Blue, Sage Green from Figma) */
+    .chips-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    .chip {
+      flex: 1;
+      padding: 12px 8px;
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      user-select: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    }
+    .chip-rose {
+      background: #9E7475;
+    }
+    .chip-slate {
+      background: #6F7A8F;
+    }
+    .chip-sage {
+      background: #779275;
+    }
+
+    /* Avatars Row (Circles from Figma) */
+    .avatars-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 4px 10px;
+    }
+    .avatar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .avatar-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #D9D9D9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4a4a4a;
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .avatar-label {
+      font-size: 12px;
+      color: #666666;
+      font-weight: 500;
+    }
+
+    /* Main Story Card (Navy Blue Card from Figma) */
+    .story-card {
+      background: #203A7A;
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(32, 58, 122, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .story-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
+    }
+    .sender-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .confidence-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid #22c55e;
+      color: #86efac;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+    .confidence-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .story-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.4;
+    }
+
+    .story-text {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #e2e8f0;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 12px 14px;
+      border-radius: 10px;
+      border-left: 3px solid #6F7A8F;
+    }
+
+    /* Audio Player Bar */
+    .audio-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+    .audio-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #203A7A;
+    }
+    .audio-wave {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      position: relative;
+    }
+    .audio-progress {
+      width: 35%;
+      height: 100%;
+      background: #86efac;
+      border-radius: 2px;
+    }
+
+    /* Provenance Box */
+    .provenance-box {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .provenance-tag {
+      font-weight: 600;
+      color: #93c5fd;
+    }
+    .provenance-desc {
+      font-size: 11px;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+
+    /* Interactive Buttons Row (點讚, 語音回覆) */
+    .actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .btn-card-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-like {
+      background: #ffffff;
+      color: #203A7A;
+    }
+    .btn-like.liked {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    .btn-voice {
+      background: #779275;
+      color: #ffffff;
+    }
+    .btn-voice.recording {
+      background: #ea580c;
+    }
+    .btn-card-action:active {
+      transform: scale(0.97);
+    }
+
+    /* Feedback Status Box */
+    .feedback-box {
+      display: none;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px dashed rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #ffffff;
+      line-height: 1.4;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .feedback-box.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-nav">
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      MemoryEcho（記憶迴響）
+    </a>
+  </div>
+
+  <div class="phone-mockup">
+    <!-- Status Bar -->
+    <div class="phone-status-bar">
+      <span>15:00</span>
+      <span>5G</span>
+    </div>
+
+    <!-- Taupe Header Bar -->
+    <header class="app-header">
+      <h1>MemoryEcho（記憶迴響）</h1>
+      <span>跨世代記憶迴響橋接器</span>
+    </header>
+
+    <div class="app-content">
+      <!-- Chips matching Figma Colors -->
+      <div class="chips-row">
+        <div class="chip chip-rose">大稻埕</div>
+        <div class="chip chip-slate">生命故事</div>
+        <div class="chip chip-sage">老照片</div>
+      </div>
+
+      <!-- Avatars Row from Figma -->
+      <div class="avatars-row">
+        <div class="avatar-item">
+          <div class="avatar-circle">秀</div>
+          <span class="avatar-label">林秀英（72歲）</span>
+        </div>
+        <div class="avatar-item">
+          <div class="avatar-circle">家</div>
+          <span class="avatar-label">陳家豪（24歲）</span>
+        </div>
+        <div class="avatar-item">
+          <div class="avatar-circle">迴</div>
+          <span class="avatar-label">記憶迴響</span>
+        </div>
+      </div>
+
+      <!-- Main Story Card (Navy Blue Card) -->
+      <div class="story-card">
+        <div class="story-card-header">
+          <span class="sender-name">林秀英女士（72 歲，退休國小教師）</span>
+          <span class="confidence-badge">
+            <span class="confidence-dot"></span>
+            綠燈（高把握度 ≥85%）
+          </span>
+        </div>
+
+        <h2 class="story-title">1970 年代在大稻埕的過往故事</h2>
+
+        <div class="story-text">
+          下午三點多電視節目結束後，客廳安靜到只有鐘擺聲…我有好多以前在大稻埕教書的照片，想給孫子看，又怕年輕人覺得無聊。如果機器能幫我整理好，用講的就能變成卡片發給孫子，我會覺得很有成就感！
+        </div>
+
+        <!-- 12秒原音片段 -->
+        <div class="audio-bar">
+          <button type="button" class="audio-btn" id="audioBtn" title="播放">
+            <svg id="playIcon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </button>
+          <span>原始 12 秒長者語音片段</span>
+          <div class="audio-wave">
+            <div class="audio-progress"></div>
+          </div>
+        </div>
+
+        <!-- 故事畫面生成溯源卡 -->
+        <div class="provenance-box">
+          <span class="provenance-tag">故事畫面生成溯源卡（模擬生成標章）</span>
+          <span class="provenance-desc">阿姨，這是根據您說的木頭餐桌，加上 1970年代大稻埕老街景幫您合成的記憶圖喔！</span>
+          <span class="provenance-desc" style="opacity: 0.75; margin-top: 2px;">AI語意修復對照與歷史考據資料庫引用標籤</span>
+        </div>
+
+        <!-- Action Buttons (點讚, 語音回覆) -->
+        <div class="actions-row">
+          <button type="button" class="btn-card-action btn-like" id="btnLike">
+            <svg id="heartIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span id="likeText">點讚</span>
+          </button>
+
+          <button type="button" class="btn-card-action btn-voice" id="btnVoice">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+            <span id="voiceText">語音回覆</span>
+          </button>
+        </div>
+
+        <!-- Feedback display box -->
+        <div class="feedback-box" id="feedbackBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const btnLike = document.getElementById('btnLike');
+    const likeText = document.getElementById('likeText');
+    const heartIcon = document.getElementById('heartIcon');
+    const btnVoice = document.getElementById('btnVoice');
+    const voiceText = document.getElementById('voiceText');
+    const feedbackBox = document.getElementById('feedbackBox');
+    const audioBtn = document.getElementById('audioBtn');
+    const playIcon = document.getElementById('playIcon');
+
+    let isLiked = false;
+    let isRecording = false;
+    let isPlayingAudio = false;
+
+    // 互動：可以按「點讚」
+    btnLike.addEventListener('click', () => {
+      isLiked = !isLiked;
+      if (isLiked) {
+        btnLike.classList.add('liked');
+        heartIcon.setAttribute('fill', 'currentColor');
+        likeText.textContent = '已點讚';
+        feedbackBox.textContent = '長者端收音機暖光閃爍 + 語音溫馨朗讀回應';
+        feedbackBox.classList.add('active');
+      } else {
+        btnLike.classList.remove('liked');
+        heartIcon.setAttribute('fill', 'none');
+        likeText.textContent = '點讚';
+        feedbackBox.classList.remove('active');
+      }
+    });
+
+    // 互動：可以按「語音回覆」
+    btnVoice.addEventListener('click', () => {
+      if (!isRecording) {
+        isRecording = true;
+        btnVoice.classList.add('recording');
+        voiceText.textContent = '錄製中…';
+        feedbackBox.textContent = '正在錄音：青年端的文字/語音回覆';
+        feedbackBox.classList.add('active');
+      } else {
+        isRecording = false;
+        btnVoice.classList.remove('recording');
+        voiceText.textContent = '語音回覆';
+        feedbackBox.textContent = '適合高齡者收聽之語音朗讀、實體燈光變化與互動紀錄';
+        feedbackBox.classList.add('active');
+      }
+    });
+
+    // 音訊播放模擬
+    audioBtn.addEventListener('click', () => {
+      isPlayingAudio = !isPlayingAudio;
+      if (isPlayingAudio) {
+        playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+      } else {
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+      }
+    });
+  </script>
+</body>
+</html>

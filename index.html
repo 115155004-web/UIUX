@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemoryEcho（記憶迴響）- 專案說明與入口</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: #18181b;
+      color: #e4e4e7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    .wrapper {
+      max-width: 720px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    /* Header Card */
+    .header-card {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      border-radius: 18px;
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .course-badge {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #a1a1aa;
+      background: #18181b;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid #3f3f46;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .project-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #e4d8b4;
+      margin-top: 10px;
+    }
+    .project-subtitle {
+      font-size: 15px;
+      color: #a1a1aa;
+      margin-top: 4px;
+    }
+
+    /* Platform Navigation Buttons */
+    .nav-card {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .nav-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .button-group {
+        grid-template-columns: 1fr;
+      }
+    }
+    .btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 20px;
+      text-decoration: none;
+      border-radius: 14px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      text-align: center;
+      border: 1px solid transparent;
+    }
+    .btn-elder {
+      background: #8A4B1A;
+      color: #ffffff;
+      border-color: #a85f26;
+      box-shadow: 0 4px 14px rgba(138, 75, 26, 0.4);
+    }
+    .btn-elder:hover {
+      background: #9c5520;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(138, 75, 26, 0.5);
+    }
+    .btn-youth {
+      background: #203A7A;
+      color: #ffffff;
+      border-color: #2b4da0;
+      box-shadow: 0 4px 14px rgba(32, 58, 122, 0.4);
+    }
+    .btn-youth:hover {
+      background: #284793;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(32, 58, 122, 0.5);
+    }
+    .btn-main-text {
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .btn-sub-text {
+      font-size: 12px;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    /* Info Sections */
+    .section-card {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      border-radius: 18px;
+      padding: 24px 28px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .section-card h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #3f3f46;
+      padding-bottom: 8px;
+    }
+
+    /* Meta Table / Grid */
+    .meta-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+      font-size: 14px;
+    }
+    @media (max-width: 600px) {
+      .meta-list {
+        grid-template-columns: 1fr;
+      }
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .meta-label {
+      font-size: 12px;
+      color: #a1a1aa;
+    }
+    .meta-value {
+      color: #f4f4f5;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* Paragraphs */
+    .desc-paragraph {
+      font-size: 14px;
+      color: #d4d4d8;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .desc-paragraph:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Specs List */
+    .spec-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 14px;
+      color: #d4d4d8;
+    }
+    .spec-item {
+      background: #1f1f23;
+      border: 1px solid #38383e;
+      border-radius: 10px;
+      padding: 12px 16px;
+      line-height: 1.6;
+    }
+    .spec-item strong {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header -->
+    <header class="header-card">
+      <div class="course-badge">智慧人機互動與使用介面研究 期末小組專案報告</div>
+      <h1>【作業一】未來社會需求導向之智慧 AI 系統功能<br>與人機互動介面設計需求調查報告</h1>
+      <div class="project-title">專案名稱：MemoryEcho（記憶迴響）</div>
+      <div class="project-subtitle">—— 獨居長者跨世代生命故事共創與智慧陪伴系統</div>
+    </header>
+
+    <!-- Navigation Buttons -->
+    <nav class="nav-card">
+      <div class="nav-title">系統平台入口</div>
+      <div class="button-group">
+        <a href="elder.html" class="btn btn-elder">
+          <span class="btn-main-text">長者端（復古木質收音機）</span>
+          <span class="btn-sub-text">多模態具身介面 · 實體按鍵與語音互動</span>
+        </a>
+        <a href="youth.html" class="btn btn-youth">
+          <span class="btn-main-text">青年端（手機 App）</span>
+          <span class="btn-sub-text">跨世代記憶迴響橋接器 · 故事卡與回覆</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Meta Information -->
+    <section class="section-card">
+      <h2>專案基本資訊</h2>
+      <div class="meta-list">
+        <div class="meta-item">
+          <span class="meta-label">課程名稱</span>
+          <span class="meta-value">智慧人機互動與使用介面研究 (Intelligent HCI & UI Research)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">作業屬性</span>
+          <span class="meta-value">小組合作期末專案需求調查（佔總成績 30%）</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">指導教授</span>
+          <span class="meta-value">授課教師團隊 / 智慧人機互動實驗室</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">專案小組</span>
+          <span class="meta-value">第 8 小組（成員：林OO、張OO）</span>
+        </div>
+        <div class="meta-item" style="grid-column: 1 / -1;">
+          <span class="meta-label">分工比例</span>
+          <span class="meta-value">需求調查 (25%) + HCI 範式規劃 (25%)、XAI與容錯設計 (25%) + 報告撰寫 (25%)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">提交日期</span>
+          <span class="meta-value">2026 年 xx 月 xx 日</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Abstract -->
+    <section class="section-card">
+      <h2>一、執行摘要 (Abstract)</h2>
+      <p class="desc-paragraph">
+        本報告針對超高齡社會下獨居長者高發之孤獨感、社交隔離、代溝斷層與生命經驗流失等重大社會痛點，提出「MemoryEcho（記憶迴響）」——獨居長者跨世代生命故事共創與智慧陪伴系統。本研究嚴格遵照 HCI 實證方法論，運用深度訪談（In-depth Interview）與脈絡訪談（Contextual Inquiry）收集 10 位目標用戶（6 位獨居長者與 4 位青年世代家屬）之質性資料，精準描繪高齡與青年雙軌 Persona 與同理地圖（Empathy Map），並劃分四階段用戶旅程圖（User Journey Map）。
+      </p>
+      <p class="desc-paragraph">
+        在系統設計規格上，MemoryEcho 創新地導入混合主動（Mixed-Initiative）互動策略與多模態具身介面（Multimodal Embodied UI），結合復古木質收音機造型裝置與觸控 UI，打造低認知負荷的互動體驗。針對 AI 盲信與科技焦慮，本專案建構多層次可解釋性 AI（XAI）機制（包含『記憶比對信心燈』與『故事畫面生成溯源卡』），並設計溫和的對話修復（Dialogue Repair）與人類接管（Human-in-the-Loop）備援機制。
+      </p>
+    </section>
+
+    <!-- Modality & UI Specifications -->
+    <section class="section-card">
+      <h2>二、模態與介面形式規格 (Modality & UI)</h2>
+      <ul class="spec-list">
+        <li class="spec-item">
+          <strong>長者端（復古木質收音機造型裝置）：</strong>
+          將硬體科技藏於極具年代溫度的實體外殼中。包含 CUI（對話介面，支援國語、台語自然語音互動）、GUI（7 吋高對比、大字體觸控螢幕，僅呈現核心資訊）、Embodied/Physical UI（保留三個大尺寸實體旋鈕與按鈕：『說故事』大按鍵、旋鈕式音量控制、實體『一鍵復原』黃色按鈕，賦予長者明確觸覺回饋）。
+        </li>
+        <li class="spec-item">
+          <strong>青年端（跨世代記憶迴響橋接器 手機 App）：</strong>
+          偏好手機 App 限時動態、精美圖卡推播與一鍵語音點讚回饋。在卡片下方提供透明的生成歷程檢視（包含原始 12 秒長者語音片段、AI語意修復對照與歷史考據資料庫引用標籤），建立跨世代雙向情感閉環。
+        </li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>
